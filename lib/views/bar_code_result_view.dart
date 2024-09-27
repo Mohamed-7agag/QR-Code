@@ -10,9 +10,15 @@ import 'package:qr_code/widgets/custom_icon_button.dart';
 import 'package:qr_code/widgets/custom_snack_bar.dart';
 import 'package:qr_code/widgets/custom_url_launcher.dart';
 
-class BarCodeResultView extends StatelessWidget {
+class BarCodeResultView extends StatefulWidget {
   const BarCodeResultView({super.key, required this.barcodeCapture});
   final BarcodeCapture? barcodeCapture;
+
+  @override
+  State<BarCodeResultView> createState() => _BarCodeResultViewState();
+}
+
+class _BarCodeResultViewState extends State<BarCodeResultView> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -39,9 +45,9 @@ class BarCodeResultView extends StatelessWidget {
                     ),
                     const SizedBox(height: 18),
                     LinkifyText(
-                      barcodeCapture == null
+                      widget.barcodeCapture == null
                           ? 'No QR Code found'
-                          : barcodeCapture?.barcodes.first.rawValue ??
+                          : widget.barcodeCapture?.barcodes.first.rawValue ??
                               'No Data Found in QR Code',
                       textStyle: const TextStyle(fontSize: 18),
                       linkStyle: const TextStyle(
@@ -55,7 +61,7 @@ class BarCodeResultView extends StatelessWidget {
                       text: 'Copy Text',
                       icon: Icons.copy_outlined,
                       onPressed: () {
-                        if (barcodeCapture == null) {
+                        if (widget.barcodeCapture == null) {
                           errorSnackBar(
                             context,
                             'There is no Text in QR Code to Copy',
@@ -78,7 +84,7 @@ class BarCodeResultView extends StatelessWidget {
   void copyText(BuildContext context) {
     Clipboard.setData(
       ClipboardData(
-        text: barcodeCapture?.barcodes.first.rawValue ?? '',
+        text: widget.barcodeCapture?.barcodes.first.rawValue ?? '',
       ),
     );
     successSnackBar(context, 'Text copied to clipboard');
