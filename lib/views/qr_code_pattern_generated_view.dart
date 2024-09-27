@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:qr_code/widgets/custom_app_bar.dart';
 import 'package:qr_code/widgets/custom_button.dart';
+import 'package:qr_code/widgets/custom_snack_bar.dart';
 import 'package:qr_code/widgets/qr_code_logo.dart';
 
 class QrCodePatternGeneratedView extends StatefulWidget {
@@ -42,12 +43,14 @@ class _QrCodePatternGeneratedViewState
         Uint8List pngBytes = byteData.buffer.asUint8List();
         await _saveImage(pngBytes);
       }
-    } catch (e) {}
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   Future<void> _saveImage(Uint8List bytes) async {
     final result = await ImageGallerySaverPlus.saveImage(bytes, quality: 100);
-    log(result + '------------------------');
+    log(result);
   }
 
   @override
@@ -62,19 +65,26 @@ class _QrCodePatternGeneratedViewState
             const Spacer(),
             RepaintBoundary(
               key: _globalKey,
-              child: QrCodeLogo(
-                data: widget.text,
-                size: 250,
-                color: widget.color,
-                isCirleShape: widget.isCirleShape,
-                colorShade: widget.colorShade,
+              child: Container(
+                color: Colors.white,
+                child: QrCodeLogo(
+                  data: widget.text,
+                  size: 250,
+                  color: widget.color,
+                  isCirleShape: widget.isCirleShape,
+                  colorShade: widget.colorShade,
+                ),
               ),
             ),
             const Spacer(),
             CustomButton(
                 text: 'Save QR Code to Gallery',
                 onPressed: () async {
-                  await _capturePng();
+                  await _capturePng().then((value) {
+                    if (context.mounted) {
+                      successSnackBar(context, 'QR Code saved to Gallery');
+                    }
+                  });
                 }),
             const SizedBox(height: 20),
           ],

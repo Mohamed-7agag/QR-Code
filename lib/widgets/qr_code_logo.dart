@@ -7,7 +7,8 @@ class QrCodeLogo extends StatelessWidget {
     required this.data,
     this.size,
     this.color,
-    this.isCirleShape = false, this.colorShade,
+    this.isCirleShape = false,
+    this.colorShade,
   });
   final String data;
   final double? size;
@@ -18,7 +19,6 @@ class QrCodeLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return QrImageView(
       data: data,
-      backgroundColor: Colors.white,
       version: QrVersions.auto,
       size: size ?? 200,
       eyeStyle: QrEyeStyle(
@@ -26,7 +26,8 @@ class QrCodeLogo extends StatelessWidget {
         color: color ?? Colors.purple,
       ),
       dataModuleStyle: QrDataModuleStyle(
-        dataModuleShape: isCirleShape ? QrDataModuleShape.circle : QrDataModuleShape.square,
+        dataModuleShape:
+            isCirleShape ? QrDataModuleShape.circle : QrDataModuleShape.square,
         color: colorShade ?? Colors.purple.shade200,
       ),
       errorStateBuilder: (cxt, err) {
